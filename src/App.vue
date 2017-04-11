@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="tile is-ancestor">
-      <div class="tile is-4 is-parent">
-        <div class="tile is-child box is-info">
+    <div class="columns">
+      <div class="column is-6">
+        <div class="box is-info">
           <h1 class="title is-2">UWC showcase</h1>
           <p class=subtitle>Showcase your ideas and projects here!</p>
 
@@ -17,11 +17,28 @@
               <a class="button is-primary" href="#">Subscribe!</a>
             </p>
           </div>
-
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="box">
+          <div class="label">Tags:</div>
+          <a class="button is-primary" href="#">Help</a>
+          <a class="button is-info" href="#">Projects</a>
+          <a class="button is-danger is-active is-inverted" href="#">Events</a>
+          <a class="button is-success" href="#">Zhi-xhings</a>
         </div>
       </div>
     </div>
-    <a class="button is-primary" href="">Load More...</a>
+    <div class="columns">
+      <div class="column"> <Post v-for="(post, index) in posts" v-if="index % 5 === 0"></Post> </div>
+      <div class="column"> <Post v-for="(post, index) in posts" v-if="index % 5 === 1"></Post> </div>
+      <div class="column"> <Post v-for="(post, index) in posts" v-if="index % 5 === 2"></Post> </div>
+      <div class="column"> <Post v-for="(post, index) in posts" v-if="index % 5 === 3"></Post> </div>
+      <div class="column"> <Post v-for="(post, index) in posts" v-if="index % 5 === 4"></Post> </div>
+    </div>
+
+
+    <a class="button is-primary is-large" id="btn-load-more" href="">Load More...</a>
     <Modal name="postami">
       <NewPost></NewPost>
     </Modal>
@@ -38,33 +55,8 @@ import NewPost from './components/NewPost'
 import ParentTile from './components/ParentTile'
 import tilingMachine from './tilingMachine'
 import Calendar from './components/Calendar'
+import Post from './components/Post'
 import axios from 'axios'
-
-
-
-tilingMachine();
-
-var parents = [{
-    'title': 'foo',
-    'isParent': 0
-}, {
-    'isParent': 1,
-    'isVertical': 'is-vertical',
-    'childList': [{
-        'title': "Lorem",
-        'isParent': 0
-    }, {
-        'title': "Ipsum",
-        'isParent': 0
-    }, {
-        'title': "Whoo",
-        'isParent': 0
-    }]
-}, {
-    'title': 'de',
-    'isParent': 0
-}];
-
 
 var app = {
   name: 'app',
@@ -74,23 +66,16 @@ var app = {
     NewPost,
     ParentTile,
     Calendar,
+    Post
   },
   data () {
     return {
       showMakePost: false,
-      parents: parents,
-      demoEvents: [{
-        date: '2016/12/15',
-        title: 'Foo',
-        desc: 'longlonglong description'
-      },{
-        date: '2016/11/12',
-        title: 'Bar'
-      }]
+      posts: ["", "", "", "", "", "", "", "", "", ""]
     }
   },
   mounted: function() {
-    /*axios.get(
+    axios.get(
       '/api/post',
       {
           headers: {
@@ -98,8 +83,8 @@ var app = {
           }
       }
     ).then((result) => {
-      //this.parents = result.data
-    });*/
+      this.posts = result.data
+    });
   }
 }
 
@@ -115,6 +100,18 @@ export default app;
   text-align: center;
   color: #2c3e50;
   margin-top: 1.5em;
+}
+
+.columns {
+  margin: 1em;
+}
+
+.columns .column {
+  padding: 0.375em;
+}
+
+.columns .column .box {
+  margin-bottom: 0.7em;
 }
 
 html {
@@ -149,5 +146,9 @@ div.field.columns {
   display: inline-block;
   margin: auto;
   text-align: center;
+}
+
+#btn-load-more {
+  margin-bottom: 2em;
 }
 </style>
