@@ -3,9 +3,9 @@
     <h1 class="title">Post something</h1>
     <div class="field">
       <label class="label">Message</label>
-      <p class="control">
-        <textarea v-model="postText" class="textarea" placeholder="Textarea"></textarea>
-      </p>
+      <div class="field">
+        <quill-editor v-model=content ></quill-editor>
+      </div>
     </div>
     <div class="field">
       <label class="label">Email</label>
@@ -22,13 +22,19 @@
 </template>
 
 <script>
+import VueQuillEditor from 'vue-quill-editor'
+
 export default {
   name: 'NewPost',
+  components: {
+    VueQuillEditor
+  },
   data () {
     return {
       postText: '',
       email: '',
       isMailValid: 1,
+      content: "<h3>Write your post here!</h3>"
     }
   },
   watch: {
@@ -71,5 +77,7 @@ function validateEmail(email) {
 </script>
 
 <style>
-
+#editor-control {
+  max-height: 50%;
+}
 </style>

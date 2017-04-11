@@ -11,7 +11,7 @@
               <a class="button is-primary" href="#postami">Make a post</a>
             </p>
             <p class="control">
-              <a class="button is-primary" href="#">Check the calendar!</a>
+              <a class="button is-primary" href="#events-calendar">Check the calendar!</a>
             </p>
             <p class="control">
               <a class="button is-primary" href="#">Subscribe!</a>
@@ -20,20 +20,13 @@
 
         </div>
       </div>
-      <div class="tile is-vertical is-4 is-parent">
-        <tile></tile>
-        <tile></tile>
-      </div>
-      <div class="tile is-2 is-parent">
-        <tile></tile>
-      </div>
-      <div class="tile is-2 is-parent">
-        <tile></tile>
-      </div>
     </div>
     <a class="button is-primary" href="">Load More...</a>
     <Modal name="postami">
       <NewPost></NewPost>
+    </Modal>
+    <Modal class="calendar-modal" name="events-calendar">
+      <Calendar></Calendar>
     </Modal>
   </div>
 </template>
@@ -42,20 +35,76 @@
 import Tile from './components/Tile'
 import Modal from './components/Modal'
 import NewPost from './components/NewPost'
+import ParentTile from './components/ParentTile'
+import tilingMachine from './tilingMachine'
+import Calendar from './components/Calendar'
+import axios from 'axios'
 
-export default {
+
+
+tilingMachine();
+
+var parents = [{
+    'title': 'foo',
+    'isParent': 0
+}, {
+    'isParent': 1,
+    'isVertical': 'is-vertical',
+    'childList': [{
+        'title': "Lorem",
+        'isParent': 0
+    }, {
+        'title': "Ipsum",
+        'isParent': 0
+    }, {
+        'title': "Whoo",
+        'isParent': 0
+    }]
+}, {
+    'title': 'de',
+    'isParent': 0
+}];
+
+
+var app = {
   name: 'app',
   components: {
     Tile,
     Modal,
-    NewPost
+    NewPost,
+    ParentTile,
+    Calendar,
   },
   data () {
     return {
-      showMakePost: false
+      showMakePost: false,
+      parents: parents,
+      demoEvents: [{
+        date: '2016/12/15',
+        title: 'Foo',
+        desc: 'longlonglong description'
+      },{
+        date: '2016/11/12',
+        title: 'Bar'
+      }]
     }
+  },
+  mounted: function() {
+    /*axios.get(
+      '/api/post',
+      {
+          headers: {
+            'Accept': 'application/json'
+          }
+      }
+    ).then((result) => {
+      //this.parents = result.data
+    });*/
   }
 }
+
+
+export default app;
 </script>
 
 <style>

@@ -28,13 +28,15 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .notification {
   position: fixed;
   left: 50%;
   top: 50%;
+
   min-width: 50%;
   min-height: 50%;
+  max-height: 95%;
   transform: translate(-50%,-50%);
 }
 

@@ -8,12 +8,7 @@
 <script>
 export default {
   name: 'tile',
-  data () {
-    return {
-      title: "Lorem ipsum",
-      text: "Dolor sit amet"
-    }
-  }
+  props: ['title', 'text']
 }
 </script>
 
