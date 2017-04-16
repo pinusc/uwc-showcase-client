@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <section class="hero is-primary">
+    <section class="hero is-info is-bold">
       <div class="hero-body">
         <img src="/static/uwclogo.svg" alt="">
         <h1 class="title is-1">showcase</h1>
@@ -13,29 +13,17 @@
           <p class="control">
             <a class="button is-primary" href="#events-calendar">Check the calendar!</a>
           </p>
-          <div class="field" :class="showSubscribe ? 'has-addons' : ''">
-            <p class="control">
-              <button id="subscribe" :class="subscribed ? 'is-success' : 'is-primary'" class="button" v-on:click="subscribe">
-                {{ subscribed ? 'Successfully subscribed!' : 'Subscribe' }}
-              </button>
-            </p>
-            <p id="subscribeEmailFieldContainer" class="control has-icon is-expanded" :class="showSubscribe ? '' : 'hide'">
-              <input v-model="emailSubscribe" id="emailField" class="input subscribe" :class="'is-' + ['success', 'danger'][isMailValid]" type="email" placeholder="Email input" value="someone@example.com">
-              <span class="icon is-small">
-                <i class="fa fa-envelope"></i>
-              </span>
-            </p>
-          </div>
           <p class="control">
-            <button v-on:click="showLabels = !showLabels" class="button is-primary">Filter</button>
+            <button id="subscribe" class="button is-success" v-on:click="subscribe">
+              Subscribe
+            </button>
           </p>
-          <div id="labelsContainer" class="field" :class="showLabels ? '' : 'hide'">
-              <a v-on:click="toggleTag" :class="!(tags.help) ? 'is-grey' : ''" id="tag-help" class="tag is-medium is-primary" href="#">Help</a>
-              <a v-on:click="toggleTag" :class="!(tags.projects) ? 'is-grey' : ''" id="tag-projects" class="tag is-medium is-warning" href="#">Projects</a>
-              <a v-on:click="toggleTag" :class="!(tags.events) ? 'is-grey' : ''" id="tag-events" class="tag is-medium is-danger is-active is-inverted" href="#">Events</a>
-              <a v-on:click="toggleTag" :class="!(tags.zhi) ? 'is-grey' : ''" id="tag-zhi" class="tag is-medium is-success" href="#">Zhi-xhings</a>
-          </div>
-
+          <p class="control has-icon" v-if="showSubscribe">
+            <input v-model="emailSubscribe" id="emailField" class="input subscribe" :class="'is-' + ['success', 'danger'][isMailValid]" type="email" placeholder="Email input" value="someone@example.com">
+            <span class="icon is-small">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </p>
         </div>
       </div>
             <!-- <div class=""> -->
@@ -88,9 +76,7 @@ var app = {
       breakpoints: {},
       showSubscribe: false,
       isMailValid: false,
-      emailSubscribe: '',
-      subscribed: false,
-      showLabels: false
+      emailSubscribe: ''
     }
   },
   mounted: function() {
@@ -137,23 +123,10 @@ var app = {
       console.log(this.tags);
     },
     subscribe: function (event) {
-      if (validateEmail(this.emailSubscribe)) {
-        axios.post('/api/user',
-          {
-            subscribed:true,
-            email: this.emailSubscribe
-          }
-        ).then((result) => {
-          if(result.status === 201) {
-            this.subscribed = true;
-            window.setTimeout(() => {this.subscribed = false}, 3000);
-          } else {
-            console.log(result);
-          }
-        });
-      }
       this.showSubscribe = !this.showSubscribe;
-      this.emailSubscribe = '';
+      if (validateEmail(this.emailSubscribe)) {
+        axios.post('/api/user', {subscribed:true, email: this.emailSubscribe}).then((result) => {});
+      }
     }
   },
   computed: {
@@ -196,6 +169,7 @@ $danger: #E53D00;
 $warning: #E8D622;
 // $danger: $blue;
 
+
 @import "../static/css/bulma";
 @import url('https://fonts.googleapis.com/css?family=Rock+Salt');
 
@@ -219,28 +193,27 @@ $warning: #E8D622;
 }
 
 html {
-  /*background: url(/static/bg.jpg) no-repeat center center fixed;
+  background: url(/static/bg.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover;*/
-  background: $primary;
+  background-size: cover;
   padding-bottom: 5em;
 }
 
 section.hero {
-  $heroFontSize: 6rem;
-  //box-shadow: 0px 5px 64px -3px rgba(0,0,0,0.75);
+  $heroFontSize: 4rem;
+  margin-bottom: 2em;
+  box-shadow: 0px 5px 64px -3px rgba(0,0,0,0.75);
   border-radius: 0.3em;
-  margin: 1.5em;
   font-family: 'Quicksand', sans-serif;
 
   .title {
-    font-family: 'Libre Baskerville', cursive;
+    font-family: 'Rock Salt', cursive;
     font-size: $heroFontSize;
-    margin-top: 3rem;
+    margin-bottom: 1em;
     margin-left: 0.3em;
-    //transform: rotate(-4deg);
+    transform: rotate(-4deg);
     float: left;
   }
 
@@ -249,54 +222,62 @@ section.hero {
   }
 
   img {
-    height: $heroFontSize;
-    margin-top: 3rem;
-    margin-left: 3rem;
+    width: 50%;
+    margin-top: -3rem;
     float: left;
   }
 
   .hero-footer {
     padding: 1em;
-    > .field.is-grouped {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .field {
-      max-width: 100%;
-      transition: all ease 0.3s;
-      .control {
-        transition: all ease 0.3s;
-      }
-      #subscribeEmailFieldContainer, #labelsContainer {
-        width: 23em;
-        max-height: 2.25em;
-        transition: width linear 0.3s;
-        overflow: hidden;
-      }
-
-      #labelsContainer {
-        max-height: 2em;
-      }
-
-      &:not(:last-child) {
-        margin-right: 0.75em;
-      }
-    }
   }
 }
 
-#postContainer {
+section.hero, #postContainer {
   margin: 0.5em;
   @include desktop {
     margin: 1em;
   }
 }
 
+/*
 .control {
-  margin-bottom: 0.5em !important;
+  text-align: center;
+  margin-bottom: 0.5em;
 }
 
+.control.subscribe {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 2.25em;
+  margin-bottom: 0;
+  transition: all .3s ease-in-out;
+}
+
+.control.subscribe.w30 {
+  width: 30%;
+  button {
+    float: left;
+  }
+}
+.control.subscribe.w70 {
+  width: 70%;
+  input {
+    float: right;
+    width: 70%;
+  }
+}
+
+.hide.subscribe {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
+*/
 input.subscribe {
+  width: 15em;
   border-width: 2px;
   padding-bottom: 0;
   padding-top: 0;
@@ -308,22 +289,8 @@ input.subscribe {
   }
 }
 
-.hide {
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden;
-}
-
-
 .subscribe-enter-active, .subscribe-leave-active {
   transition: all 0.3s;
-}
-
-.subscribe-enter, .subscribe-leave-to {
-  transform: scaleX(0);
-  transform-origin: left;
 }
 
 

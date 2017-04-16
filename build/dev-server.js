@@ -32,6 +32,7 @@ var compiler = webpack(webpackConfig)
 // app.use(proxy);
 
 app.use('/api', proxyMiddleware({target: 'http://localhost:8081'}));
+app.use('/verify', proxyMiddleware({target: 'http://localhost:8081'}));
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,

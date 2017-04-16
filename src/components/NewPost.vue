@@ -2,6 +2,10 @@
   <div>
     <h1 class="title">Post something</h1>
     <div class="field">
+      <label class="label">Title</label>
+      <input type="text" class="input" v-model="title">
+    </div>
+    <div class="field">
       <label class="label">Message</label>
       <div class="field">
         <quill-editor v-model=content ></quill-editor>
@@ -17,12 +21,13 @@
       </p>
       <p class="help" :class="'is-' + ['success', 'danger', 'danger'][isMailValid]">{{ ["This is a valid email", "This email is invalid", "Please enter a uwcchina.org email"][isMailValid] }}</p>
     </div>
-    <a v-on:click="submitPost" class="button is-success" href="">Submit</a>
+    <a v-on:click="submitPost" class="button is-success" href="#" :disabled="isMailValid > 0">Submit</a>
   </div>
 </template>
 
 <script>
 import VueQuillEditor from 'vue-quill-editor'
+import axios from 'axios'
 
 export default {
   name: 'NewPost',
@@ -33,6 +38,7 @@ export default {
     return {
       postText: '',
       email: '',
+      title: '',
       isMailValid: 1,
       content: "<h3>Write your post here!</h3>"
     }
@@ -53,17 +59,16 @@ export default {
   methods: {
     submitPost: function() {
       if (! this.isMailValid) {
-        var that = this;
-        $.ajax({
-          type: 'post',
-          url: 'newpost',
-          data: {
-            message: that.postText,
-            email: that.email
-          },
-          success: function(r) {
-              alert(r);
+        axios.post(
+          '/api/post',
+          {
+            body: this.content,
+            title: this.title,
+            email: this.email
           }
+        ).then((result) => {
+          console.log(result)
+          this.posts = result.data
         });
       }
     }
@@ -80,4 +85,5 @@ function validateEmail(email) {
 #editor-control {
   max-height: 50%;
 }
+
 </style>
